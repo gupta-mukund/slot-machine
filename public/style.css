@@ -1,0 +1,14 @@
+#slot_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.singleSlot {
+  height: 10vh;
+  width: 10vh;
+  background-color: yellow;
+  text-align: center;
+  border: 2px solid black;
+  font-size: 50px;
+}
