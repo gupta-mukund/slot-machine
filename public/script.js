@@ -9,11 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const SLOTS = document.getElementsByClassName("singleSlot");
+const GAME = document.getElementById("slot_container");
+const RESULT = document.getElementById("result");
+const BUTTON = document.getElementById("playButton");
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 function slotChange(slot, times, duration) {
     return new Promise((res, rej) => __awaiter(this, void 0, void 0, function* () {
         for (let i = 1; i < times; i++) {
-            slot.innerText = icons[Math.floor(Math.random() * 6)];
+            slot.innerText = icons[Math.floor(Math.random() * icons.length)];
             yield delay(duration);
             let molt = times - 2 * slot.id;
             molt = molt < 0 ? molt * -1 : molt;
@@ -22,34 +25,38 @@ function slotChange(slot, times, duration) {
         res(Math.floor(Math.random() * 3));
     }));
 }
-const icons = ["💎", "🍋", "🍉", "❤", "🔔", "🍒"];
-// window.onload = () => {
-//   for (let i = 0; i < 10; i++) {
-//     setTimeout(() => {
-//       (<HTMLDivElement>SLOTS[0]).innerText = i as unknown as string;
-//     }, 500 * i);
-//   }
-// };
-// const secondAnimation = async () => {
-//   let i = 0;
-//   let duration = 500;
-//   for (let j = 0; j < 100; j++) {
-//     i = (await slotChange(
-//       SLOTS[i] as HTMLDivElement,
-//       Math.floor(Math.random() * 5),
-//       duration
-//     )) as number;
-//     duration += 50;
-//   }
-// };
-const declareWinners = () => {
-    let same = 0;
-    for (let i = 0; i < SLOTS.length - 1; i++) {
-        if (SLOTS[i].innerHTML == SLOTS[i + 1].innerHTML) {
-            same++;
+const icons = ["💎", "🍋", "🍉", "❤", "🔔", "🍒", "💰", "🤑", "👧"];
+const declareWinners = (icons) => {
+    var map = icons.reduce(function (prev, cur) {
+        prev[cur] = (prev[cur] || 0) + 1;
+        return prev;
+    }, {});
+    let prevValue = 0;
+    for (let value in map) {
+        if (map[value] > prevValue) {
+            prevValue = map[value];
         }
     }
-    console.log(same);
+    console.log(prevValue);
+    return createWinResult(prevValue);
+};
+const createWinResult = (points) => {
+    let result;
+    switch (points) {
+        case 3:
+            result = "You win!";
+            break;
+        case 4:
+            result = "Big din!";
+            break;
+        case 5:
+            result = "Jackpot!";
+            break;
+        default:
+            result = "You loose!";
+            break;
+    }
+    return result;
 };
 const initialAnimation = () => {
     let times = 10;
@@ -59,7 +66,13 @@ const initialAnimation = () => {
             let promise = slotChange(item, (times += 2), 400);
             arrayPromise.push(promise);
         }
-        Promise.all(arrayPromise).then(() => res("done"));
+        Promise.all(arrayPromise).then(() => {
+            let result = [];
+            for (let item of SLOTS) {
+                result.push(item.innerHTML);
+            }
+            res(result);
+        });
     }));
 };
 const secondAnimation = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -71,11 +84,16 @@ const secondAnimation = () => __awaiter(void 0, void 0, void 0, function* () {
         res("");
     }));
 });
-window.onload = () => {
-    initialAnimation().then(() => declareWinners());
-    // .then((res) => {
-    //   console.log(res);
-    //   secondAnimation();
-    // })
-    // .then(() => declareWinners());
-};
+BUTTON.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+    BUTTON.disabled = true;
+    RESULT.style.display = "none";
+    GAME.style.display = "flex";
+    let slotsResult = yield initialAnimation();
+    let gameResult = declareWinners(slotsResult);
+    yield delay(1500).then(() => {
+        RESULT.style.display = "flex";
+        GAME.style.display = "none";
+        RESULT.innerHTML = gameResult;
+        BUTTON.disabled = false;
+    });
+}));

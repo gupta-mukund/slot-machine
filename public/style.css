@@ -1,14 +1,76 @@
-#slot_container {
+* {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+html,
+body {
+  background: rgb(34, 193, 195);
+  background: linear-gradient(
+    0deg,
+    rgba(34, 193, 195, 1) 0%,
+    rgba(242, 245, 255, 1) 98%
+  );
+  height: 100vh;
+}
+
+#game {
+  background-color: #160c28;
+  border-radius: 50px;
+  height: 95vh;
+  width: 50vw;
+  margin: auto;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
+}
+#slot_container,
+#result {
+  width: 90%;
+  margin: auto;
+  display: none;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+}
+
+#result {
+  display: flex;
+  color: white;
+  font-size: 8vmin;
 }
 
 .singleSlot {
-  height: 10vh;
-  width: 10vh;
-  background-color: yellow;
+  height: 100%;
+  width: 20%;
+  margin-top: 2vh;
+  background-color: #efcb68;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
   border: 2px solid black;
-  font-size: 50px;
+  font-size: 14vh;
+}
+
+#playButton {
+  margin: auto;
+  height: 10vh;
+  width: 20vw;
+  font-size: 6vh;
+  border-radius: 20px;
+  background-color: #efcb68;
+}
+
+#playButton:hover {
+  background-color: #160c28;
+  border: 2px solid #efcb68;
+  color: #efcb68;
+}
+
+#buttonDiv {
+  height: 30vh;
 }
